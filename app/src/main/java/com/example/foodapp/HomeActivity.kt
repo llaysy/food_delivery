@@ -83,3 +83,5 @@ class HomeActivity : AppCompatActivity() {
         Toast.makeText(this, "Информация о пользователе", Toast.LENGTH_SHORT).show()
     }
 }
+
+//llaysy
