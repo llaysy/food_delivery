@@ -1,6 +1,7 @@
 package com.example.foodapp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -26,16 +27,24 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Проверка, если пользователь не авторизован, перенаправляем на LoginActivity
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_home)
 
+        // Сохранение последней активности
+        val preferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        preferences.edit().putString("lastActivity", "HomeActivity").apply()
+
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().getReference("Users") // Ссылка на пользователей
+        database = FirebaseDatabase.getInstance().getReference("Users")
 
         btnLogoutUser = findViewById(R.id.btnLogoutUser)
-        btnMessage = findViewById(R.id.btnMessage)
-        btnFavorite = findViewById(R.id.btnFavorite)
-        btnWishlist = findViewById(R.id.btnWishlist)
-        btnHelp = findViewById(R.id.btnHelp)
         icAvatar = findViewById(R.id.icAvatar)
         tvUserName = findViewById(R.id.tvUserName)
         tvUserRole = findViewById(R.id.tvUserRole)
@@ -57,10 +66,8 @@ class HomeActivity : AppCompatActivity() {
             database.child(userId).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result.exists()) {
-                        val userName = task.result.child("name").value.toString() // Предполагается, что имя хранится под ключом "name"
-                        val userRole = task.result.child("role").value.toString() // Предполагается, что роль хранится под ключом "role"
+                        val userName = task.result.child("name").value.toString()
                         tvUserName.text = userName
-                        tvUserRole.text = userRole
                     } else {
                         Toast.makeText(this, "Пользователь не найден", Toast.LENGTH_SHORT).show()
                     }
@@ -73,13 +80,17 @@ class HomeActivity : AppCompatActivity() {
 
     private fun logout() {
         auth.signOut() // Выход из аккаунта
+
+        // Сброс состояния входа
+        val preferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        preferences.edit().putBoolean("isLoggedIn", false).apply()
+
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish() // Закрыть HomeActivity
     }
 
     private fun showUserInfo() {
-        // Здесь можно открыть новое окно или диалог с информацией о пользователе
         Toast.makeText(this, "Информация о пользователе", Toast.LENGTH_SHORT).show()
     }
 }

@@ -13,6 +13,21 @@
         android:theme="@style/Theme.Foodapp"
         tools:targetApi="31">
         <activity
+            android:name=".AdminCategoriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddEditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoriesActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminHomeActivity"
             android:exported="false" />
         <activity

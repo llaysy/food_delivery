@@ -1,6 +1,7 @@
 package com.example.foodapp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -24,6 +25,15 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Проверка, если пользователь уже авторизован, перенаправляем на HomeActivity
+        val preferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        if (preferences.getBoolean("isLoggedIn", false)) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
@@ -40,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
         tvForgotPassword.setOnClickListener { resetPassword() }
 
         tvSwitchToRegistration.setOnClickListener {
-            // Переход на экран регистрации
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
@@ -57,7 +66,10 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Пользователь успешно вошел в систему, проверяем его роль
+                    // Пользователь успешно вошел в систему, устанавливаем состояние входа
+                    val preferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    preferences.edit().putBoolean("isLoggedIn", true).apply()
+
                     val user = auth.currentUser
                     user?.let {
                         checkUserRole(it.uid) // Передаем UID для проверки роли
@@ -76,10 +88,12 @@ class LoginActivity : AppCompatActivity() {
                 if (task.result.exists()) {
                     // Это администратор
                     Toast.makeText(this, "Успешный вход как администратор", Toast.LENGTH_SHORT).show()
+                    saveLastActivity("AdminHomeActivity") // Сохранение последней активности
                     startActivity(Intent(this, AdminHomeActivity::class.java))
                 } else {
                     // Это покупатель
                     Toast.makeText(this, "Успешный вход как покупатель", Toast.LENGTH_SHORT).show()
+                    saveLastActivity("HomeActivity") // Сохранение последней активности
                     startActivity(Intent(this, HomeActivity::class.java))
                 }
                 finish() // Закрыть LoginActivity
@@ -87,6 +101,11 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Ошибка при проверке роли: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun saveLastActivity(activityName: String) {
+        val preferences: SharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        preferences.edit().putString("lastActivity", activityName).apply()
     }
 
     private fun resetPassword() {

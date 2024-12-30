@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <EditText
+        android:id="@+id/etProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Название товара"/>
+
+    <EditText
+        android:id="@+id/etProductPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Цена товара"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/etProductDiscount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Скидка товара"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/etProductDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Описание товара"/>
+
+    <EditText
+        android:id="@+id/etProductImageUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ссылка на изображение"/>
+
+    <Spinner
+        android:id="@+id/spinnerCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnSaveProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Сохранить"/>
+</LinearLayout>

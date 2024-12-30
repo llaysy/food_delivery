@@ -4,18 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <TextView
+        android:id="@+id/tvWelcomeMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Добро пожаловать на главный экран администратора!"
         android:textSize="24sp" />
 
     <Button
+        android:id="@+id/btnManageProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Управление продуктами" />
+
+    <Button
+        android:id="@+id/btnCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Управление категориями" />
+
+    <Button
         android:id="@+id/btnLogoutAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Выйти из аккаунта" />
-
 </LinearLayout>
