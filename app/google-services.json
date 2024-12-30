@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "653718110738",
+    "firebase_url": "https://food-8b17a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "food-8b17a",
+    "storage_bucket": "food-8b17a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653718110738:android:93c0f5c3f136846d5f8ecb",
+        "android_client_info": {
+          "package_name": "com.example.foodapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCnGdUmDC89Q2I9SNLn0VBjdgjopfMlFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
