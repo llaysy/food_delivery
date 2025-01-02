@@ -16,6 +16,7 @@ class AdminProductsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var btnAddProduct: Button
+    private lateinit var btnRefreshProducts: Button // Новая кнопка для обновления списка продуктов
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -31,6 +32,7 @@ class AdminProductsActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewProducts)
         btnAddProduct = findViewById(R.id.btnAddProduct)
+        btnRefreshProducts = findViewById(R.id.btnRefreshProducts) // Инициализация кнопки обновления
 
         productsAdapter = ProductsAdapter(products) { product ->
             val intent = Intent(this, AddEditProductActivity::class.java).apply {
@@ -46,25 +48,11 @@ class AdminProductsActivity : AppCompatActivity() {
             startActivity(Intent(this, AddEditProductActivity::class.java))
         }
 
-        loadProducts()
-    }
-
-    private fun loadCategories() {
-        val categoriesDatabase = FirebaseDatabase.getInstance().getReference("Categories")
-        categoriesDatabase.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val categoriesList = mutableListOf<String>()
-                task.result.children.forEach { snapshot ->
-                    val category = snapshot.getValue(Category::class.java)
-                    category?.let { categoriesList.add(it.name) }
-                }
-                // Убедитесь, что вы используете правильный адаптер для Spinner
-                val adapter = SpinnerCategoriesAdapter(this, categoriesList) // Убедитесь, что это правильный адаптер
-                // spinnerCategories.adapter = adapter // Проверьте, правильно ли определен spinner
-            } else {
-                Toast.makeText(this, "Ошибка загрузки категорий", Toast.LENGTH_SHORT).show()
-            }
+        btnRefreshProducts.setOnClickListener {
+            loadProducts() // Загрузка продуктов при нажатии на кнопку обновления
         }
+
+        loadProducts() // Начальная загрузка продуктов
     }
 
     private fun loadProducts() {

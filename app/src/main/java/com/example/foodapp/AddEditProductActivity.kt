@@ -63,6 +63,12 @@ class AddEditProductActivity : AppCompatActivity() {
                     val category = snapshot.getValue(Category::class.java)
                     category?.let { categories.add(it) }
                 }
+
+                // Создание адаптера и установка его в Spinner
+                val categoryNames = categories.map { it.name } // Получаем только названия категорий
+                val adapter = SpinnerCategoriesAdapter(this, categoryNames)
+                spinnerCategories.adapter = adapter
+
                 // Проверьте, что категории загружены
                 if (categories.isEmpty()) {
                     Toast.makeText(this, "Нет доступных категорий", Toast.LENGTH_SHORT).show()

@@ -53,24 +53,6 @@ class MainActivity : AppCompatActivity() {
             // Переход на экран регистрации администратора
             startActivity(Intent(this, AdminRegistrationActivity::class.java))
         }
-
-        // Проверка на наличие сохраненного типа пользователя
-        checkUserType()
-    }
-
-    private fun checkUserType() {
-        val sharedPreferences = getSharedPreferences("UserTypePref", MODE_PRIVATE)
-        val userType = sharedPreferences.getString("userType", null)
-
-        if (userType == "admin") {
-            // Переход на главный экран для администратора
-            startActivity(Intent(this, AdminHomeActivity::class.java))
-            finish() // Закрыть MainActivity
-        } else if (userType == "buyer") {
-            // Переход на главный экран для покупателя
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish() // Закрыть MainActivity
-        }
     }
 
     private fun registerUser() {

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt") // Добавьте этот плагин
     id("com.google.gms.google-services")
 }
 
@@ -37,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.github.bumptech.glide:glide:4.13.2")
+    kapt ("com.github.bumptech.glide:compiler:4.13.2")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation ("com.google.firebase:firebase-auth-ktx")
