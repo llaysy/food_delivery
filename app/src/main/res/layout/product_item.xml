@@ -45,6 +45,13 @@
             android:text="Категория"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"/>
+
+        <Button
+            android:layout_marginTop="8dp"
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Удалить" />
     </LinearLayout>
 
     <ImageView
@@ -52,6 +59,8 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:src="@android:drawable/ic_menu_gallery" /> <!-- Замените на изображение по умолчанию -->
+
 </LinearLayout>

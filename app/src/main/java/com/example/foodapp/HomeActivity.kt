@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -15,15 +17,15 @@ import com.google.firebase.database.FirebaseDatabase
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var btnLogoutUser: Button
-    private lateinit var btnMessage: Button
-    private lateinit var btnFavorite: Button
-    private lateinit var btnWishlist: Button
-    private lateinit var btnHelp: Button
     private lateinit var icAvatar: ImageView
-    private lateinit var auth: FirebaseAuth
     private lateinit var tvUserName: TextView
     private lateinit var tvUserRole: TextView
+    private lateinit var recyclerViewCategories: RecyclerView
+    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+
+    private val categories = mutableListOf<Category>()
+    private lateinit var categoriesAdapter: CategoriesAdapter // Адаптер для категорий
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
         icAvatar = findViewById(R.id.icAvatar)
         tvUserName = findViewById(R.id.tvUserName)
         tvUserRole = findViewById(R.id.tvUserRole)
+        recyclerViewCategories = findViewById(R.id.recyclerViewCategories)
 
         btnLogoutUser.setOnClickListener {
             logout()
@@ -58,6 +61,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         loadUserInfo()
+        loadCategories()  // Загрузка категорий
     }
 
     private fun loadUserInfo() {
@@ -78,6 +82,35 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadCategories() {
+        val categoriesDatabase = FirebaseDatabase.getInstance().getReference("Categories")
+        categoriesDatabase.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                categories.clear()
+                task.result.children.forEach { snapshot ->
+                    val category = snapshot.getValue(Category::class.java)
+                    category?.let { categories.add(it) }
+                }
+                setupCategoriesRecyclerView() // Настройка RecyclerView после загрузки категорий
+            } else {
+                Toast.makeText(this, "Ошибка загрузки категорий", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupCategoriesRecyclerView() {
+        categoriesAdapter = CategoriesAdapter(categories) { category ->
+            // Переход к экрану с продуктами выбранной категории
+            val intent = Intent(this, ProductsByCategoryActivity::class.java).apply {
+                putExtra("category_id", category.id)
+                putExtra("category_name", category.name)
+            }
+            startActivity(intent)
+        }
+        recyclerViewCategories.layoutManager = LinearLayoutManager(this)
+        recyclerViewCategories.adapter = categoriesAdapter
+    }
+
     private fun logout() {
         auth.signOut() // Выход из аккаунта
 
@@ -94,5 +127,3 @@ class HomeActivity : AppCompatActivity() {
         Toast.makeText(this, "Информация о пользователе", Toast.LENGTH_SHORT).show()
     }
 }
-
-//llaysy
